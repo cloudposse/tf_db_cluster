@@ -21,4 +21,8 @@ module "rds_cluster_aurora_postgres" {
   security_groups = ["sg-xxxxxxxx"]
   subnets         = ["subnet-xxxxxxxx", "subnet-xxxxxxxx"]
   zone_id         = "Zxxxxxxxx"
+
+  # Create the KMS keys
+  storage_encrypted            = true
+  performance_insights_enabled = true
 }

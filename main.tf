@@ -59,7 +59,7 @@ resource "aws_rds_cluster" "primary" {
   skip_final_snapshot                 = var.skip_final_snapshot
   apply_immediately                   = var.apply_immediately
   storage_encrypted                   = var.engine_mode == "serverless" ? null : var.storage_encrypted
-  kms_key_id                          = var.kms_key_arn
+  kms_key_id                          = local.storage_kms_key_arn
   source_region                       = var.source_region
   snapshot_identifier                 = var.snapshot_identifier
   vpc_security_group_ids              = compact(flatten([join("", aws_security_group.default.*.id), var.vpc_security_group_ids]))
@@ -140,7 +140,7 @@ resource "aws_rds_cluster" "secondary" {
   skip_final_snapshot                 = var.skip_final_snapshot
   apply_immediately                   = var.apply_immediately
   storage_encrypted                   = var.storage_encrypted
-  kms_key_id                          = var.kms_key_arn
+  kms_key_id                          = local.storage_kms_key_arn
   source_region                       = var.source_region
   snapshot_identifier                 = var.snapshot_identifier
   vpc_security_group_ids              = compact(flatten([join("", aws_security_group.default.*.id), var.vpc_security_group_ids]))
@@ -216,7 +216,7 @@ resource "aws_rds_cluster_instance" "default" {
   monitoring_interval             = var.rds_monitoring_interval
   monitoring_role_arn             = var.enhanced_monitoring_role_enabled ? join("", aws_iam_role.enhanced_monitoring.*.arn) : var.rds_monitoring_role_arn
   performance_insights_enabled    = var.performance_insights_enabled
-  performance_insights_kms_key_id = var.performance_insights_kms_key_id
+  performance_insights_kms_key_id = local.performance_insights_kms_key_id
   availability_zone               = var.instance_availability_zone
 
   depends_on = [
